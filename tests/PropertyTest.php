@@ -9,21 +9,24 @@ use PHPUnit\Framework\TestCase;
 class PropertyTest extends TestCase
 {
 
-    public const ORDER_JSON_0 = '{"orderid":1,"name":"订单","products":null}';
-    public const ORDER_JSON_1 = '{"orderid":1,"name":"订单","products":[{"productid":101,"product_name":"apple","product_price":null}]}';
+    public const ORDER_JSON_0 = '{"orderid":1,"name":"订单"}';
+    public const ORDER_JSON_1 = '{"orderid":1,"name":"订单","products":null}';
+    public const ORDER_JSON_2 = '{"orderid":1,"name":"订单","products":[{"productid":101,"product_name":"apple","product_price":null}]}';
 
     public function testSerializer(): void
     {
-        $order       = new Order();
+        $order       = Order::make();
         $order->id   = 1;
         $order->name = "订单";
 
-        $this->assertEquals(self::ORDER_JSON_0, $order->serialize());
+        $serialize = $order->serialize();
+
+        $this->assertEquals(self::ORDER_JSON_1, $serialize);
     }
 
     public function testDeserializer(): void
     {
-        $order = Order::make()->deserialize(self::ORDER_JSON_1);
+        $order = Order::make()->deserialize(self::ORDER_JSON_2);
 
         $this->assertEquals(1, $order->id);
         $this->assertEquals("订单", $order->name);
@@ -45,6 +48,6 @@ class PropertyTest extends TestCase
             ],
         ])->serialize();
 
-        $this->assertEquals(self::ORDER_JSON_1, $orderSerializer);
+        $this->assertEquals(self::ORDER_JSON_2, $orderSerializer);
     }
 }

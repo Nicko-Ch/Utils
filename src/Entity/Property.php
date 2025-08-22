@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace NickoCh\Utils\Entity;
 
 use JMS\Serializer\DeserializationContext;
+use JMS\Serializer\Expression\ExpressionEvaluator;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Visitor\Factory\JsonSerializationVisitorFactory;
 use NickoCh\Utils\Exception\EntityException;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Property
 {
@@ -67,6 +69,7 @@ class Property
 
         return SerializerBuilder::create()
             ->setSerializationVisitor('json', $vistor)
+            ->setExpressionEvaluator(new ExpressionEvaluator(new ExpressionLanguage()))
             ->setSerializationContextFactory(function () {
                 return SerializationContext::create()
                     ->setSerializeNull(true);
